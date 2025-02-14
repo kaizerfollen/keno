@@ -4,7 +4,6 @@
 
 export const randomNumbers = (sizeLength) => {
   const numbers = Array.from({ length: sizeLength }, () => Math.floor(Math.random() * 80) + 1);
-  console.log('Generated numbers:', numbers);
   return numbers;
 };
 
@@ -53,7 +52,7 @@ export const dataCells = Array.from({ length: 80 }, (_, index) => ({
   isActive: false,
   isBlue: false,
   isRed: false,
-  isRandom: false,
+  isCoupon: false,
   isWin: false,
 }));
 

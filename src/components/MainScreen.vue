@@ -8,7 +8,7 @@ const isLoader = ref(true)
 onMounted(() => {
   setTimeout(() => {
     isLoader.value = false;
-  }, 2000); // Simulating loading time. Replace with your own logic. 2 seconds here for demo purposes.
+  }, 2000);
 })
 </script>
 
@@ -30,7 +30,6 @@ onMounted(() => {
   width: 1234px;
   height: 729px;
   margin: 0 auto;
-  // background: #000;
   .loader {
     position: absolute;
     top: 50%;

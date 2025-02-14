@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { dataCells, getRandomIndices, randomNumbers } from '@/services/common';
+import AudioButtonClick from '@/assets/audio/buttonClick.mp3';
+import AudioBallCollision from '@/assets/audio/ballCollision.mp3';
 
 const BALLS_LENGTH = 20;
 
@@ -35,7 +37,7 @@ export const useMainStore = defineStore('main', {
 
   actions: {
     initializeAudio() {
-      this.audio = new Audio('https://bet1000.de/FLG.Space/release/libs/FLGUtils/resources/audio/ballCollision.mp3');
+      this.audio = new Audio(AudioBallCollision);
     },
     setRandomNumbers() {
       this.randomNumbers = randomNumbers(BALLS_LENGTH);;
@@ -49,7 +51,7 @@ export const useMainStore = defineStore('main', {
 
     setActiveScreen(payload) {
       this.activeScreen = payload;
-      const audio = new Audio('https://bet1000.de/FLG.Space/release/libs/FLGUtils/resources/audio/buttonClick.mp3');
+      const audio = new Audio(AudioButtonClick);
       audio.play();
     },
 
@@ -58,7 +60,6 @@ export const useMainStore = defineStore('main', {
     },
 
     setActiveCell(payload) {
-      console.log(payload, 'hello');
       this.dataCells = this.dataCells.map(cell =>
         cell.id === payload.id ? { ...cell, isActive: !cell.isActive } : cell
       );
@@ -69,7 +70,7 @@ export const useMainStore = defineStore('main', {
         cell.isWin = false;
       });
 
-      const audio = new Audio('https://bet1000.de/FLG.Space/release/libs/FLGUtils/resources/audio/ballCollision.mp3');
+      const audio = new Audio(AudioBallCollision);
     
       for (const number of payload) {
         const cell = this.dataCells.find(cell => cell.id === number);
@@ -98,7 +99,7 @@ export const useMainStore = defineStore('main', {
       const randomIndices = getRandomIndices(this.randomCount, this.dataCells.length);
 
       randomIndices.forEach(index => {
-        this.dataCells[index].isRandom = true;
+        this.dataCells[index].isCoupon = true;
       });
 
       // Создаём объект с новыми данными
@@ -111,14 +112,43 @@ export const useMainStore = defineStore('main', {
 
       // Добавляем новый объект в randomCellsNumber
       this.randomCellsNumber = [
-        ...this.randomCellsNumber.filter(entry => entry.balls.length > 0), // Оставляем только заполненные объекты
+        ...this.randomCellsNumber.filter(entry => entry.balls.length > 0),
         newEntry,
-        ...Array(10).fill({ balls: [], bet: '', x_bet: '', total: '' }), // Добавляем пустые объекты
-      ].slice(0, 10); // Обрезаем массив до 10 элементов
+        ...Array(10).fill({ balls: [], bet: '', x_bet: '', total: '' }),
+      ].slice(0, 10);
     },
 
     setShowCoef(payload) {
       this.isShowCoef = payload;
     },
+
+    addBet() {
+      const filtersCells = this.dataCells.filter(el => el.isActive)
+
+      filtersCells.forEach(index => {
+        this.dataCells[index.id - 1].isCoupon = true;
+      });
+
+      // Создаём объект с новыми данными
+      const newEntry = {
+        balls: filtersCells.map(idx => this.dataCells[idx.id - 1].id),
+        bet: Math.floor(Math.random() * 10) + 1,
+        x_bet: Math.floor(Math.random() * 5) + 1,
+        total: Math.floor(Math.random() * 4) + 1,
+      };
+
+      // Добавляем новый объект в randomCellsNumber
+      this.randomCellsNumber = [
+        ...this.randomCellsNumber.filter(entry => entry.balls.length > 0),
+        newEntry,
+        ...Array(10).fill({ balls: [], bet: '', x_bet: '', total: '' }),
+      ].slice(0, 10);
+
+      filtersCells.forEach(index => {
+        this.dataCells = this.dataCells.map(cell =>
+          cell.id === index.id ? { ...cell, isActive: !cell.isActive } : cell
+        );
+      });
+    }
   },
 });

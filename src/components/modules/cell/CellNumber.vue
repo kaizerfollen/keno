@@ -24,11 +24,11 @@ const props = defineProps({
         { 'button--active': props.cell.isActive },
         { 'button--red-text': props.cell.isRed && mainStore.isEye },
         { 'button--blue-text': props.cell.isBlue && mainStore.isEye },
-        { 'button--random': props.cell.isRandom },
+        { 'button--random': props.cell.isCoupon },
         { 'button--is-win': props.cell.isWin },
       ]"
     >
-      {{ props.numberCell }}
+      {{ props.cell.id }}
     </div>
   </div>
 </template>
@@ -43,13 +43,7 @@ const props = defineProps({
   height: 54px;
   font-size: 22px;
   font-weight: bold;
-  // text-shadow: 0 -1px 1px #777;
   color: #fff;
-  // outline: none;
-  // border: 1px solid #000;
-  // border-radius: 3px;
-  // box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5);
-  // background: radial-gradient(at center bottom, white -120%, black 80%);
   background-image: url('https://static1.flg10.bet/FLG.Space/release/games/Keno/resources/NG/zone.png');
   background-repeat: no-repeat;
   background-position: center center;

@@ -9,13 +9,14 @@ import StatScreen from '@/components/modules/game-screen/StatScreen.vue';
 import VideoScreen from '@/components/modules/game-screen/VideoScreen.vue';
 import CoefScreen from '@/components/modules/game-screen/CoefScreen.vue';
 import HistoryScreen from '@/components/modules/game-screen/HistoryScreen.vue';
+import AudioFirstChip from '@/assets/audio/firstChip.mp3'
 
 import { useMainStore } from '@/stores';
 const mainStore = useMainStore();
 
 const addCell = (cell) => {
   mainStore.setActiveCell(cell);
-  const audio = new Audio('https://bet1000.de/FLG.Space/release/libs/FLGUtils/resources/audio/firstChip.mp3');
+  const audio = new Audio(AudioFirstChip);
   audio.play();
 };
 const filterCell = computed(() => {
@@ -28,20 +29,6 @@ watch(() => mainStore.getRandomNumbers, (newValue) => {
   }, 2000)
 })
 
-const isWinVisible = ref(filterCell.value.map(() => false));
-
-filterCell.value.forEach((cell, idx) => {
-  watch(() => cell.isWin, (newVal) => {
-    if (newVal) {
-      setTimeout(() => {
-        isWinVisible.value[idx] = true;
-      }, 4000);
-    } else {
-      isWinVisible.value[idx] = false;
-    }
-  });
-});
-
 </script>
 
 <template>
@@ -53,8 +40,6 @@ filterCell.value.forEach((cell, idx) => {
             v-for="(cell, idx) in filterCell"
             :key="idx"
             :cell="cell"
-            :number-cell="cell.id"
-            :is-win-visible="isWinVisible[idx]"
             @click="addCell(cell)"
           />
         </div>

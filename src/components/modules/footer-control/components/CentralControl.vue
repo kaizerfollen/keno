@@ -1,5 +1,7 @@
 <script setup>
 import { useMainStore } from '@/stores';
+import AudioButtonClick from '@/assets/audio/buttonClick.mp3';
+
 const mainStore = useMainStore()
 
 const randowBetNumber = () => {
@@ -7,9 +9,12 @@ const randowBetNumber = () => {
   playAudioClick()
 };
 
-const playAudioClick = () => {
-  const audio = new Audio('https://bet1000.de/FLG.Space/release/libs/FLGUtils/resources/audio/buttonClick.mp3');
+const addBet = () => {
+  mainStore.addBet();
+};
 
+const playAudioClick = () => {
+  const audio = new Audio(AudioButtonClick);
   audio.play()
 };
 </script>
@@ -19,7 +24,7 @@ const playAudioClick = () => {
     <div class="btn autoplay bgi" @click="playAudioClick">
       <span>автоигра</span>
     </div>
-    <div class="btn-circle bgi"></div>
+    <div class="btn-circle bgi" @click="addBet"></div>
     <div class="btn random bgi" @click="randowBetNumber">
       <span>случайно</span>
     </div>
